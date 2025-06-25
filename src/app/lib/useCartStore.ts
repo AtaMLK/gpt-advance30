@@ -50,10 +50,10 @@ interface Product {
 }
 
 interface CardState {
-  items: [];
+  items: Product[];
   addItem: (product: Product) => void;
-  increase: (id: number) => void;
-  decrease: (id: number) => void;
+  increaseQty: (id: number) => void;
+  decreaseQty: (id: number) => void;
   removeCart: (id: number) => void;
   clearCart: () => void;
 }
@@ -61,11 +61,40 @@ interface CardState {
 export const useCartStore = create<CardState>((set) => ({
   items: [],
 
-  addItem:(product)=>{(set(state)=> {
-    const found = state.set.pr
-  })},
-  increase,
-  decrease,
-  removeCart,
-  clearCart,
+  addItem: (product) =>
+    set((state) => {
+      const found = state.items.find((p) => p.id === product.id);
+      if (found)
+        return {
+          items: state.items.map((p) =>
+            p.id === product.id
+              ? { ...p, quantity: p.quantity + product.quantity }
+              : p
+          ),
+        };
+      return { items: [...state.items, product] };
+    }),
+
+  increaseQty: (id) => {
+    set((state) => ({
+      items: state.items.map((item) =>
+        id === item.id ? { ...item, quantity: item.quantity + 1 } : item
+      ),
+    }));
+  },
+  decreaseQty: (id) => {
+    set((state) => ({
+      items: state.items
+        .map((item) =>
+          id === item.id ? { ...item, quantity: item.quantity - 1 } : item
+        )
+        .filter((item) => item.quantity > 0),
+    }));
+  },
+  removeCart: (id) =>
+    set((state) => ({
+      items: state.items.filter((item) => item.id !== id),
+    })),
+
+  clearCart: () => set({ items: [] }),
 }));
