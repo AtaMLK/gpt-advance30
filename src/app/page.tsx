@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import Flex from "./component/Flex";
 
 export default function Home() {
@@ -11,7 +12,8 @@ export default function Home() {
       <ShopPage />
       <CartPage />
       <StepCounter/> */}
-      <Flex/>
+      <Flex />
+      <Link href={"/playground"}>Play Gournd</Link>
     </div>
   );
 }
