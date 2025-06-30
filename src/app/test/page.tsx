@@ -14,7 +14,7 @@ export default function TestPage() {
   return (
     <div className="p-10 flex gap-10">
       <Button onclick={() => showToast("Added to your cart")}>
-        <ToastList/>
+        <ToastList />
         Show Toast
       </Button>
       <Button onclick={() => setIsOpen(true)}>Opem Modal</Button>

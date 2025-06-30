@@ -18,7 +18,6 @@ export default function ToastList() {
           </motion.div>
         ))}
       </AnimatePresence>
-      ;
     </div>
   );
 }
