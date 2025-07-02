@@ -3,8 +3,10 @@ import { useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import ToastList from "../component/ui/ToastList";
 import { motion, AnimatePresence } from "framer-motion";
+import { useToastStore } from "../lib/toastStore";
 
 export default function LoginPage() {
+  const { showToast } = useToastStore();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -14,12 +16,9 @@ export default function LoginPage() {
       password,
     });
     if (error) {
-      alert("Login failed" + error.message);
-      {
-        /* <ToastList>{error.message}</ToastList>; */
-      }
+      showToast("Login failed: " + error.message, "error");
     } else {
-      alert("Logging In");
+      showToast("Logged In", "success");
     }
   };
   const handleSignUp = async () => {
@@ -28,9 +27,9 @@ export default function LoginPage() {
       password,
     });
     if (error) {
-      alert("Sign Up failed" + error.message);
+      showToast("SignUp failed: " + error.message, "error");
     } else {
-      alert("Signed Up");
+      showToast("Signed Up", "success");
     }
   };
   const handleGoogle = async () => {
@@ -39,6 +38,7 @@ export default function LoginPage() {
 
   return (
     <AnimatePresence>
+      <ToastList />
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
