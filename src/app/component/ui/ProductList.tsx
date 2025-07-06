@@ -37,7 +37,7 @@ export default function ProductsList() {
     if (!error) setProducts((prev) => prev.filter((p) => p.id !== id));
   };
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3 lg:grid-cols-4 gap-8 mt-4 font-[Roboto]">
+    <div className="flex flex-wrap gap-6">
       {editingProducts ? (
         <EditProductsPage
           product={editingProducts}
@@ -45,18 +45,21 @@ export default function ProductsList() {
         />
       ) : (
         products.map((product) => (
-          <div key={product.id}>
-            <div className="border relative border-stone-200 hover:shadow-md rounded-xl flex flex-col pb-2 justify-between  h-[25rem]">
+          <div
+            key={product.id}
+            className="relative w-[18rem] h-[25rem] bg-white border border-stone-200 hover:shadow-md rounded-xl overflow-hidden flex flex-col"
+          >
+            <div className=" justify-between border relative border-stone-200 hover:shadow-md rounded-xl flex flex-col pb-2 w-[18rem] h-[25rem]">
               <img
                 src={
                   supabase.storage
                     .from("products")
                     .getPublicUrl(product.image_url).data.publicUrl
                 }
-                className="w-full h-50 z-10 rounded-full object-center object-cover rounded-t-xl"
+                className="w-full h-[12.5rem] z-10 object-center object-cover rounded-t-xl rounded-b-full"
                 alt={product.title}
               />
-              <span className="w-full h-58 bg-amber-200/30 rounded-full absolute top-0 hover:h-full hover:rounded-lg transition-all duration-150 z-0"></span>
+              <span className="w-full h-[14.5rem] bg-amber-200/30 rounded-full absolute top-0 hover:h-full hover:rounded-lg transition-all duration-150 z-0"></span>
               <div className="flex flex-col gap-2 px-4 py-2">
                 <h1 className="text-xl font-bold tracking-wider">
                   {product.title}
