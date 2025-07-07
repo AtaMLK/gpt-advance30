@@ -1,11 +1,14 @@
-import EditProductsPage from "@/app/dashboard/products/editProductPage/page";
+"use client";
 import { supabase } from "@/app/lib/supabaseClient";
-import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { DollarSign } from "lucide-react";
+import { ArrowLeft, DollarSign } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
+import EditProductComponent from "./EditProductComponent";
 
 type Product = {
   id: number;
+  name: string;
   title: string;
   price: number;
   description: string;
@@ -17,17 +20,19 @@ type Product = {
 export default function ProductsList() {
   const [products, setProducts] = useState<Product[]>([]);
   const [editingProducts, setEditingProducts] = useState<Product | null>(null);
+  const router = useRouter();
+
+  const fetchProducts = useCallback(async () => {
+    const { data } = await supabase
+      .from("tsproducts")
+      .select("*")
+      .order("created_at", { ascending: false });
+    setProducts(data || []);
+  }, []);
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      const { data } = await supabase
-        .from("tsproducts")
-        .select("*")
-        .order("created_at", { ascending: false });
-      setProducts(data || []);
-    };
     fetchProducts();
-  }, []);
+  }, [fetchProducts]);
 
   const deleteProduct = async (id: number) => {
     const confirm = window.confirm("Are you sure you want to delete this item");
@@ -37,19 +42,31 @@ export default function ProductsList() {
     if (!error) setProducts((prev) => prev.filter((p) => p.id !== id));
   };
   return (
-    <div className="flex flex-wrap gap-6">
-      {editingProducts ? (
-        <EditProductsPage
-          product={editingProducts}
-          onDone={() => setEditingProducts(null)}
-        />
-      ) : (
-        products.map((product) => (
+    <div className="relative flex flex-wrap items-center justify-center gap-6">
+      <button
+        onClick={() => router.back()}
+        className="absolute text-stone-600 p-5 top-0 left-5 rounded hover:bg-blue-900/20 bg-blue-900/10 shadow cursor-pointer"
+      >
+        <ArrowLeft className="hover:scale-125 transtion-all duration-200" />
+      </button>
+      <div>
+        {editingProducts && (
+          <EditProductComponent
+            product={editingProducts}
+            onDone={() => {
+              setEditingProducts(null);
+              fetchProducts();
+            }}
+          />
+        )}
+      </div>
+      <div className="flex flex-wrap items-center justify-center gap-6 mt-20">
+        {products.map((product) => (
           <div
             key={product.id}
-            className="relative w-[18rem] h-[25rem] bg-white border border-stone-200 hover:shadow-md rounded-xl overflow-hidden flex flex-col"
+            className="relative top-20 w-[18rem] h-[25rem] bg-white border border-stone-200 hover:shadow-md rounded-xl overflow-hidden flex flex-col"
           >
-            <div className=" justify-between border relative border-stone-200 hover:shadow-md rounded-xl flex flex-col pb-2 w-[18rem] h-[25rem]">
+            <div className="  justify-between border relative border-stone-200 hover:shadow-md rounded-xl flex flex-col pb-2 w-[18rem] h-[25rem]">
               <img
                 src={
                   supabase.storage
@@ -90,8 +107,8 @@ export default function ProductsList() {
               </div>
             </div>
           </div>
-        ))
-      )}
+        ))}
+      </div>
     </div>
   );
 }

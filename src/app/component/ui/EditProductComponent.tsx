@@ -2,11 +2,9 @@
 import { supabase } from "@/app/lib/supabaseClient";
 import { ProductForm, ProductSchema } from "@/app/lib/validation/productSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowLeft } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 
-export default function EditProductsPage({
+export default function EditProductComponent({
   product,
   onDone,
 }: {
@@ -19,8 +17,6 @@ export default function EditProductsPage({
   };
   onDone: () => void;
 }) {
-  const router = useRouter();
-
   const {
     register,
     handleSubmit,
@@ -34,9 +30,11 @@ export default function EditProductsPage({
     },
   });
   const onSubmit = async (data: ProductForm) => {
+    console.log("Submitting form with data:", data); // 👈 اضافه کن
     let imagePath = product.image_url;
 
     if (data.image && data.image[0]) {
+      console.log("iploading image :", data.image[0]);
       const file = data.image[0];
       const fileName = `${Date.now()}-${file.name}`;
       const { data: uploadData } = await supabase.storage
@@ -58,17 +56,14 @@ export default function EditProductsPage({
     if (!error) onDone();
   };
   return (
-    <div className="relative  p-5 w-full  ">
-      <button
-        onClick={() => router.back()}
-        className="absolute p-5 top-1 left-1 rounded bg-stone-50 shadow"
-      >
-        <ArrowLeft />
-      </button>
-      <div className="absolute top-25 bg-stone-50  shadow w-full min-h-screen p-5 rounded ">
+    <div
+      className="relative flex items-center justify-center
+      p-5  "
+    >
+      <div className="relative top-25 bg-stone-50 shadow w-full  p-5 rounded ">
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="bg-stone-50 border-stone-200 rounded-xl shadow-2xl p-10 flex flex-col"
+          className="bg-stone-50 border border-stone-200  rounded-xl shadow-2xl p-10 flex flex-col"
         >
           <input
             {...register("title")}
@@ -100,7 +95,7 @@ export default function EditProductsPage({
           <input type="file" {...register("image")} className="w-full" />
           <button
             type="submit"
-            className="bg-green-600 text-white px-4 py-2 rounded"
+            className="bg-green-600 text-white px-4 py-2 rounded mt-5 cursor-pointer"
           >
             Save changes
           </button>
