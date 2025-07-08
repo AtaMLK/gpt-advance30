@@ -9,7 +9,7 @@ export default function AddProductsPage() {
     <div className="relative rounded shadow bg-stone-50 w-full h-min py-10">
       <button
         onClick={() => router.back()}
-        className="absolute text-stone-600 p-5 top-0 left-5 rounded hover:bg-blue-900/20 bg-blue-900/10 shadow cursor-pointer"
+        className="absolute text-stone-600 p-5 top-0 left-5 rounded hover:bg-blue-900/20 bg-blue-900/10 mt-5 shadow cursor-pointer"
       >
         <ArrowLeft className="hover:scale-125 transtion-all duration-200" />
       </button>

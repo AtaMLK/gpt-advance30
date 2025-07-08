@@ -89,7 +89,6 @@ export default function ShopPage() {
         viewport={{ once: false }}
         className="flex gap-4 "
       >
-        P{" "}
         {products.map((item) => (
           <motion.li
             variants={itemBox}

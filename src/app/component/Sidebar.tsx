@@ -11,11 +11,17 @@ export default function Sidebar() {
         isOpen ? "w-64" : "w-0"
       } bg-gray-800 text-white transition-all duration-300 overflow-hidden h-full`}
     >
-      <div className="p-4 font-bold text-lg">Admin</div>
-      <ul className="space-y-2 px-4">
-        <li><a href="/dashboard">Dashboard</a></li>
-        <li><a href="/dashboard/products">Products</a></li>
-        <li><a href="/dashboard/orders">Orders</a></li>
+      <div className="p-4 font-bold text-lg mb-20">Admin</div>
+      <ul className="space-y-8 px-4 ">
+        <li>
+          <a href="/admin">Admin Dashboard</a>
+        </li>
+        <li>
+          <a href="/admin/products">Products</a>
+        </li>
+        <li>
+          <a href="/admin/orders">Orders</a>
+        </li>
       </ul>
     </div>
   );

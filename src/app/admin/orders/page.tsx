@@ -45,11 +45,11 @@ export default function OrdersPage() {
   },[]) */
 
   return (
-    <div className="flex  h-screen w-full flex-col items-center justify-center">
-      <h1>Orders</h1>
+    <div className="flex h-screen w-full flex-col px-20">
+      <h1 className="text-2xl font-bold text-blue-900/80 uppercase bg">Orders</h1>
       <table>
         <thead>
-          <tr>
+          <tr className="">
             <th className="p-2 text-left">Email</th>
             <th className="p-2 text-left">Status</th>
             <th className="p-2 text-left">Total</th>

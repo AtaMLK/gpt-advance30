@@ -5,6 +5,7 @@ import { ArrowLeft, DollarSign } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import EditProductComponent from "./EditProductComponent";
+import Modal from "./Modal";
 
 type Product = {
   id: number;
@@ -51,22 +52,27 @@ export default function ProductsList() {
       </button>
       <div>
         {editingProducts && (
-          <EditProductComponent
-            product={editingProducts}
-            onDone={() => {
-              setEditingProducts(null);
-              fetchProducts();
-            }}
-          />
+          <Modal
+            isOpen={!!editingProducts}
+            onClose={() => setEditingProducts(null)}
+          >
+            <EditProductComponent
+              product={editingProducts}
+              onDone={() => {
+                setEditingProducts(null);
+                fetchProducts();
+              }}
+            />
+          </Modal>
         )}
       </div>
       <div className="flex flex-wrap items-center justify-center gap-6 mt-20">
         {products.map((product) => (
           <div
             key={product.id}
-            className="relative top-20 w-[18rem] h-[25rem] bg-white border border-stone-200 hover:shadow-md rounded-xl overflow-hidden flex flex-col"
+            className="relative top-20 w-[18rem] h-[25rem] bg-white border border-stone-200 hover:shadow-md rounded-xl overflow-hidden flex flex-col group"
           >
-            <div className="  justify-between border relative border-stone-200 hover:shadow-md rounded-xl flex flex-col pb-2 w-[18rem] h-[25rem]">
+            <div className="justify-between border relative border-stone-200 hover:shadow-md rounded-xl flex flex-col pb-2 w-[18rem] h-[25rem]">
               <img
                 src={
                   supabase.storage
@@ -76,8 +82,9 @@ export default function ProductsList() {
                 className="w-full h-[12.5rem] z-10 object-center object-cover rounded-t-xl rounded-b-full"
                 alt={product.title}
               />
-              <span className="w-full h-[14.5rem] bg-amber-200/30 rounded-full absolute top-0 hover:h-full hover:rounded-lg transition-all duration-150 z-0"></span>
-              <div className="flex flex-col gap-2 px-4 py-2">
+              <span className="w-full h-[14.5rem] bg-amber-200/30 rounded-full absolute top-0 group-hover:h-full group-hover:rounded-lg transition-all duration-150 z-0"></span>
+
+              <div className="flex flex-col gap-2 px-4 py-2 z-10">
                 <h1 className="text-xl font-bold tracking-wider">
                   {product.title}
                 </h1>
@@ -87,7 +94,7 @@ export default function ProductsList() {
                 </p>
                 <p className="text-sm line-clamp-2">{product.description}</p>
               </div>
-              <div className="flex gap-10 px-5 py-2">
+              <div className="flex gap-10 px-5 py-2 z-10">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.98 }}

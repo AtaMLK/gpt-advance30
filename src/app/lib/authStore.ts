@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import { supabase } from "./supabaseClient";
-import { useEffect } from "react";
 
 interface UserState {
   user: unknown | null;
