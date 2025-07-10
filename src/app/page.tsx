@@ -1,19 +1,28 @@
 "use client";
 import Link from "next/link";
-import Flex from "./component/Flex";
+import { useAuthStore } from "./lib/authStore";
+import { useState } from "react";
 
 export default function Home() {
+  const [loading, setLoading] = useState(true);
+  const { user, logout } = useAuthStore();
   return (
     <div className="w-full ">
-      {/* <Counter />
-      <Card title="Neckless" price={220} image="/img1.jpg" />
-      <Card title="Bracelet" price={320} image="/img2.jpg" />
-      <LoginFrom />
-      <ShopPage />
-      <CartPage />
-      <StepCounter/> */}
-      <Flex />
-      <Link href={"/playground"}>Play Gournd</Link>
+      <div className="flex flex-col h-80 w-full items-center justify-center">
+        <Link href={"/playground"}>Play Gournd</Link>
+        <Link href={"/login"}>Login</Link>
+        {user && (
+          <Link
+            href={"/shop"}
+            onClick={() => {
+              setLoading(false);
+              logout();
+            }}
+          >
+            {loading ? "Logout" : "...Loading"}
+          </Link>
+        )}
+      </div>
     </div>
   );
 }

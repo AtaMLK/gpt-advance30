@@ -1,17 +1,16 @@
 import { create } from "zustand";
 import { supabase } from "./supabaseClient";
+import { User } from "@supabase/supabase-js";
 
 interface UserState {
-  user: unknown | null;
-  setUser: (user: unknown) => void;
+  user: User | null | undefined;
+  setUser: (user: User | null) => void;
   fetchUser: () => void;
-  logout: () => void;
+  logout: () => Promise<void>;
 }
 
-
-
 export const useAuthStore = create<UserState>((set) => ({
-  user: null,
+  user: undefined,
   setUser: (user) => set({ user }),
   fetchUser: async () => {
     const {
@@ -24,3 +23,7 @@ export const useAuthStore = create<UserState>((set) => ({
     set({ user: null });
   },
 }));
+
+supabase.auth.onAuthStateChange((_event, session) => {
+  useAuthStore.getState().setUser(session?.user ?? null);
+});

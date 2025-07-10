@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import ToastList from "../component/ui/ToastList";
+import { ADMIN_EMAIL } from "../constants/appConfig";
 import { useAuthStore } from "../lib/authStore";
 import { supabase } from "../lib/supabaseClient";
 import { useToastStore } from "../lib/toastStore";
@@ -15,6 +16,23 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const router = useRouter();
   const user = useAuthStore((state) => state.user);
+  const fetchUser = useAuthStore((s) => s.fetchUser);
+
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
+  useEffect(() => {
+    if (user === undefined) return;
+
+    if (!user) {
+    } else if (user?.email === ADMIN_EMAIL) {
+      router.push("/admin");
+    } else {
+      router.push("/");
+    }
+  }, [user, router]);
 
   const handleLogin = async () => {
     const { error } = await supabase.auth.signInWithPassword({
@@ -34,12 +52,6 @@ export default function LoginPage() {
   const handleGoogle = async () => {
     await supabase.auth.signInWithOAuth({ provider: "google" });
   };
-
-  useEffect(() => {
-    if (user) {
-      router.replace("/");
-    }
-  }, [user, router]);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
