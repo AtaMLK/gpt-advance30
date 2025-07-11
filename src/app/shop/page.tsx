@@ -4,6 +4,7 @@ import { useState } from "react";
 import Card from "../component/ui/Card";
 import Drawer from "../component/ui/Drawer";
 import Modal from "../component/ui/Modal";
+import Link from "next/link";
 
 interface Product {
   title: string;
@@ -80,6 +81,7 @@ export default function ShopPage() {
         transition={{ duration: 0.6 }}
       >
         <h1 className="font-bold text-3xl"> Shop </h1>
+        <Link href={"/"} className=" px-4 py-2 bg-blue-600/30 rounded-3xl mt-2.5">Home</Link>
         <p className="font-normal text-lg py-3"> All the categories</p>
       </motion.div>
       <motion.ul

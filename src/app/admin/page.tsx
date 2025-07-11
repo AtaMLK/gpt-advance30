@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { ADMIN_EMAIL } from "../constants/appConfig";
 import { useAuthStore } from "../lib/authStore";
+import Cookies from "js-cookie";
 
 export default function AdminPage() {
   const user = useAuthStore((s) => s.user);
@@ -10,6 +11,7 @@ export default function AdminPage() {
 
   useEffect(() => {
     if (user === undefined) return;
+    Cookies.set("user-email", user?.email ?? "");
 
     if (!user) {
       router.push("/login");

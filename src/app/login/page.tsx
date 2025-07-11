@@ -1,6 +1,8 @@
 "use client";
 import { motion } from "framer-motion";
+import Cookies from "js-cookie";
 import Image from "next/image";
+
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import ToastList from "../component/ui/ToastList";
@@ -17,7 +19,6 @@ export default function LoginPage() {
   const router = useRouter();
   const user = useAuthStore((state) => state.user);
   const fetchUser = useAuthStore((s) => s.fetchUser);
-
 
   useEffect(() => {
     fetchUser();
@@ -40,7 +41,10 @@ export default function LoginPage() {
       password,
     });
     if (error) showToast("Login failed: " + error.message, "error");
-    else showToast("Logged In", "success");
+    else {
+      Cookies.set("user-email", email);
+      showToast("Logged In", "success");
+    }
   };
 
   const handleSignUp = async () => {
